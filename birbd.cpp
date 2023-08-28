@@ -21,7 +21,13 @@ int main(int argc, char** argv)
 	}
 	else
 	{
-		std::cout << "Missing args" << std::endl;
+		std::cout 	<< "Usage: birbd [--server|message]\n\n"
+					<< "If --server option is used, birbd will act as a server\n\n"
+					<< "Valid messages (values between [] are placeholders):\n"
+					<< "  ping                                       the server should answer with pong\n"
+					<< "  has_package;[tarball_name];[md5_checksum]  the server will answer either positive or negative\n"
+					<< "                                             depending on if the server had the tarball or not\n\n"
+					<< "If the server answers NULL, something went wrong or the query was invalid\n";
 	}
 
 	return 0;
