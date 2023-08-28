@@ -32,9 +32,17 @@ void Server::listen()
 
 			/* Read data from the socket */
 			std::string received_data;
+
+			constexpr int buffer_size = 128;
+
+			/* How many times will the server accept a full buffer worth
+			 * of data. 8 * 128 = 1024 chars */
+			constexpr int max_buffer_receive_count = 8;
+			int full_buffer_counter = 0;
+
 			while (true)
 			{
-				std::array<char, 128> buf;
+				std::array<char, buffer_size> buf;
 				buf.fill(0);
 
 				boost::system::error_code error;
@@ -47,12 +55,26 @@ void Server::listen()
 
 				std::cout << "Got " << len << " bytes of data\n";
 				received_data += buf.data();
+				full_buffer_counter++;
+
+				/* We have read plenty of data. If this if-statement gets hit, this
+				 * is probably a DOS attempt or a malformed connection */
+				if (full_buffer_counter >= max_buffer_receive_count)
+					break;
 			}
 			socket.close();
 
+
 			/* Answer the client */
 			acceptor.accept(socket);
-			std::string answer = message_handler(received_data);
+			std::string answer = "";
+
+			/* Ignore requests that are too short or long */
+			if (received_data.size() < 4 || received_data.size() > 1024)
+				answer = "NULL";
+			else
+				answer = message_handler(received_data);
+
 			const char* raw_answer = reinterpret_cast<const char*>(answer.data());
 			boost::asio::write(socket, boost::asio::buffer(raw_answer, answer.size()), ignored_error);
 		}
