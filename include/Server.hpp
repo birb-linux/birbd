@@ -20,6 +20,4 @@ private:
 	boost::asio::io_context io_context;
 	boost::system::error_code ignored_error;
 	tcp::acceptor acceptor;
-
-	std::unordered_map<std::string, std::string> message_cache;
 };
