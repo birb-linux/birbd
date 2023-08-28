@@ -2,13 +2,17 @@
 #include "Server.hpp"
 #include <array>
 #include <birb/Utils.hpp>
+#include <chrono>
 #include <exception>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <iterator>
 #include <string>
+#include <thread>
 #include <vector>
+
+using namespace std::chrono_literals;
 
 const std::string distcache_path = "/var/cache/distfiles";
 
@@ -77,6 +81,8 @@ void Server::listen()
 
 			const char* raw_answer = reinterpret_cast<const char*>(answer.data());
 			boost::asio::write(socket, boost::asio::buffer(raw_answer, answer.size()), ignored_error);
+
+			std::this_thread::sleep_for(10ms);
 		}
 	}
 	catch (std::exception& e)
