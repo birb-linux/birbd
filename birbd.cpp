@@ -18,6 +18,13 @@ int main(int argc, char** argv)
 		Client client(argv[1], "1500");
 		std::string response = client.connect(argv[2]);
 		std::cout << response << std::endl;
+
+		/* If the response was NULL, return 1
+		 * in all other cases return 0 */
+		if (response == "NULL")
+			return 1;
+		else
+			return 0;
 	}
 	else
 	{
