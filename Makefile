@@ -18,6 +18,7 @@ $(BIN): $(OBJ)
 
 install:
 	cp ./$(BIN) $(DESTDIR)$(PREFIX)/bin/
+	[ -f /etc/birbd.conf ] || cp ./birbd.conf $(DESTDIR)/etc/birbd.conf
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/$(BIN)
