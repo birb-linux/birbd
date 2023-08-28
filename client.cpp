@@ -41,13 +41,12 @@ std::string Client::connect(const std::string& data)
 
 			size_t len = socket.read_some(boost::asio::buffer(buf), error);
 
-			if (len > 0)
-				response += buf.data();
-
 			if (error == boost::asio::error::eof)
 				break;
 			else if (error)
 				throw boost::system::system_error(error);
+
+			response += buf.data();
 		}
 		socket.close();
 	}
