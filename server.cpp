@@ -95,9 +95,13 @@ bool Server::contains_path_traversal(const std::string& file_name) const
 	return (file_name.find("..") != std::string::npos || file_name.find("/") != std::string::npos);
 }
 
-std::string Server::message_handler(std::string message) const
+std::string Server::message_handler(std::string message)
 {
 	std::cout << "Message: " << message << std::endl;
+
+	/* Check if the answer for this message has already been cached */
+	if (message_cache.contains(message))
+		return message_cache[message];
 
 	/* Define all queries */
 	constexpr char ping[] 			= "ping";
@@ -126,7 +130,10 @@ std::string Server::message_handler(std::string message) const
 		/* Prevent path traversal vulnerabilities */
 		std::string tarball = message_parts[1];
 		if (contains_path_traversal(tarball))
+		{
+			message_cache[message] = negative;
 			return negative;
+		}
 
 		const std::string tarball_path 		= distcache_path + "/" + tarball;
 		const std::string tarball_checksum 	= message_parts[2];
@@ -137,13 +144,20 @@ std::string Server::message_handler(std::string message) const
 			std::string md5 = get_file_hash(tarball_path);
 
 			if (md5 == tarball_checksum)
+			{
+				message_cache[message] = positive;
 				return positive;
+			}
 			else
+			{
+				message_cache[message] = negative;
 				return negative;
+			}
 		}
 		else
 		{
 			/* Package file wasn't found */
+			message_cache[message] = negative;
 			return negative;
 		}
 	}
