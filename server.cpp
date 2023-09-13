@@ -1,7 +1,6 @@
 #include "Crypto.hpp"
 #include "Server.hpp"
 #include <array>
-#include <birb/Utils.hpp>
 #include <chrono>
 #include <exception>
 #include <filesystem>
@@ -20,6 +19,28 @@ Server::Server(int port)
 :acceptor(boost::asio::ip::tcp::acceptor(io_context, tcp::endpoint(tcp::v4(), port))),
 	port(port)
 {}
+
+std::vector<std::string> split_string(std::string text, const std::string& delimiter)
+{
+	assert(text.empty() == false);
+	assert(delimiter.empty() == false);
+
+	std::vector<std::string> result;
+
+	/* Split the string */
+	size_t pos = 0;
+	while ((pos = text.find(delimiter)) != std::string::npos)
+	{
+		result.push_back(text.substr(0, pos));
+		text.erase(0, pos + delimiter.length());
+	}
+
+	if (!text.empty())
+		result.push_back(text);
+
+	return result;
+}
+
 
 void Server::listen()
 {
@@ -120,7 +141,7 @@ std::string Server::message_handler(std::string message)
 		message.erase(message.size() - 1, 1);
 
 	/* Split the message into parts */
-	std::vector<std::string> message_parts = birb::split_string(message, ";");
+	std::vector<std::string> message_parts = split_string(message, ";");
 
 	/* Connection test */
 	if (message_parts[0] == ping)
