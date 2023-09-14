@@ -11,7 +11,7 @@ OBJ=$(SRC:.cpp=.o)
 all: birbd
 
 $(BIN): $(OBJ)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^ /usr/lib/birb/libbirb.a
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $^
