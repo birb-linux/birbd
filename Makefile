@@ -20,8 +20,12 @@ install:
 	cp ./$(BIN) $(DESTDIR)$(PREFIX)/bin/
 	[ -f /etc/birbd.conf ] || cp ./birbd.conf $(DESTDIR)/etc/birbd.conf
 
+install-systemd: install
+	cp ./birbd.service /etc/systemd/system/birbd.service
+
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/$(BIN)
+	rm -f /etc/systemd/system/birbd.service
 
 clean:
 	rm -f *.o

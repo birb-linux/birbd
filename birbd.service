@@ -1,0 +1,15 @@
+[Unit]
+Description=Run a birbd server
+DefaultDependencies=no
+After=network.target
+
+[Service]
+Type=simple
+User=birbd
+Group=birbd
+ExecStart=/usr/bin/birbd --server
+TimeoutStartSec=0
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
