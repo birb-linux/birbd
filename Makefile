@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-O2 -flto=auto -I./include -std=c++20
+CXXFLAGS=-O2 -flto=auto -I./include -std=c++20 -pthread
 LDFLAGS=-lcrypto
 
 BIN=birbd
