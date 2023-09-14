@@ -6,3 +6,19 @@ Birbd runs in the background waiting for other computers to reach out and ask fo
 ## Dependencies
 - boost
 - openssl
+
+## Setup
+Setting up a birbd service requires some things both on the client side and server side
+
+### Server
+- Compile and install birbd
+       - If you want to use the included systemd service, install birbd with `make PREFIX=/usr install-systemd`
+- Create a /var/cache/distfiles directory and download/copy any tarballs you want to share there
+- Create a birbd user and give it access to /var/cache/distfiles
+- Create ssh keys for the birbd user with `ssh-keygen`
+
+### Client
+- Compile and install birbd
+- Create ssh keys for the root user with `ssh-keygen`
+- Copy the public key of the root user to the birbd server with `ssh-copy-id`
+- Add the IP-address of the birbd server to /etc/birbd.conf
