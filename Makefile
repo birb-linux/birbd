@@ -11,7 +11,7 @@ OBJ=$(SRC:.cpp=.o)
 all: birbd
 
 $(BIN): $(OBJ)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $^
