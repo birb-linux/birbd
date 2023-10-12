@@ -18,6 +18,7 @@ $(BIN): $(OBJ)
 
 install:
 	cp ./$(BIN) $(DESTDIR)$(PREFIX)/bin/
+	cp ./sync-mirror.sh $(DESTDIR)$(PREFIX)/bin/sync-birb-mirror
 	[ -f /etc/birbd.conf ] || cp ./birbd.conf $(DESTDIR)/etc/birbd.conf
 
 install-systemd: install
@@ -25,6 +26,7 @@ install-systemd: install
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/$(BIN)
+	rm -f $(DESTDIR)$(PREFIX)/bin/sync-birb-mirror
 	rm -f /etc/systemd/system/birbd.service
 
 clean:
