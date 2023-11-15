@@ -57,8 +57,20 @@ do
 		# Check if the tarball is in distcache
 		if [ ! -f "$DISTCACHE_PATH/$TARBALL_NAME" ]
 		then
+			# Handle .onion addresses with torsocks if required
+			TORSOCKS_COMMAND=""
+			if onion_check "$SOURCE"
+			then
+				# The package has an onion source URL, check if tor is installed and running
+				tor_check || exit 1
+
+				# Make wget use torsocks
+				TORSOCKS_COMMAND="torsocks"
+				echo "Downloading the package through Tor from $SOURCE"
+			fi
+
 			# The tarball isn't in distcache, download it using wget
-			wget -q --show-progress --directory-prefix="$DISTCACHE_PATH" "$SOURCE"
+			$TORSOCKS_COMMAND wget -q --show-progress --directory-prefix="$DISTCACHE_PATH" "$SOURCE"
 
 			# Check the integrity of the tarball
 			TARBALL_CHECKSUM="$(md5sum "$DISTCACHE_PATH/$TARBALL_NAME" | cut -d ' ' -f1)"
